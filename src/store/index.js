@@ -5,7 +5,7 @@ import VueAxios from "vue-axios";
 
 Vue.use(Vuex, VueAxios, axios);
 
-axios.defaults.baseURL = "http://localhost:3000/api/";
+axios.defaults.baseURL = "http://localhost:3000/";
 
 export const store = new Vuex.Store({
   state: {
@@ -40,6 +40,9 @@ export const store = new Vuex.Store({
     increment(state) {
       state.count++;
     },
+    getUsers(state, data) {
+      state.users = data;
+    },
     createUser(state, data) {
       state.users.push(data);
     },
@@ -47,7 +50,7 @@ export const store = new Vuex.Store({
       state.users.splice(data.index, 1, data.user);
     },
     deleteUser(state, data) {
-      state.users.splice(data, 1);
+      state.users.splice(data.index, 1);
     },
   },
   actions: {
@@ -59,8 +62,7 @@ export const store = new Vuex.Store({
         axios
           .get("/users")
           .then((response) => {
-            console.log(response);
-            context.commit("getUsers", response.result);
+            context.commit("getUsers", response.data.result);
             resolve(response);
           })
           .catch((error) => {
@@ -70,16 +72,58 @@ export const store = new Vuex.Store({
       });
     },
     createUser(context, data) {
-      context.commit("createUser", data);
-      console.log(data);
+      return new Promise((resolve, reject) => {
+        axios
+          .post("/users", data)
+          .then((response) => {
+            context.commit("createUser", response.data.result);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     updateUser(context, data) {
-      console.log(data);
-      context.commit("updateUser", data);
+      let updateData = {
+        name: data.user.name,
+        email: data.user.email,
+        phone: data.user.phone,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .put("/users/" + data.user.user_id, updateData)
+          .then((response) => {
+            const update = {
+              index: data.index,
+              user: response.data.result,
+            };
+            context.commit("updateUser", update);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     deleteUser(context, data) {
-      console.log(data);
-      context.commit("deleteUser", data);
+      return new Promise((resolve, reject) => {
+        axios
+          .delete("/users/" + data.user.user_id)
+          .then((response) => {
+            const update = {
+              index: data.index,
+            };
+            context.commit("deleteUser", update);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
   },
 });

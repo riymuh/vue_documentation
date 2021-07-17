@@ -161,7 +161,10 @@ export default {
 
     deleteItemConfirm() {
       this.$store
-        .dispatch("deleteUser", this.editedIndex)
+        .dispatch("deleteUser", {
+          index: this.editedIndex,
+          user: this.editedItem,
+        })
         .then((res) => {
           console.log(res);
         })
