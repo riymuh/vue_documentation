@@ -10,30 +10,11 @@ axios.defaults.baseURL = "http://localhost:3000/";
 export const store = new Vuex.Store({
   state: {
     count: 0,
-    users: [
-      {
-        id: 1,
-        name: "Riyadh Muhammad",
-        phone: "0812221212",
-        email: "mriyadh103@gmail.com",
-      },
-      {
-        id: 2,
-        name: "Diana Zelvi",
-        phone: "12121",
-        email: "diana@gmail.com",
-      },
-      {
-        id: 3,
-        name: "Budi",
-        phone: "122222",
-        email: "budi@gmail.com",
-      },
-    ],
+    users: [],
   },
   getters: {
     getUser: (state) => {
-      return state.users.find((user) => user.id == 1);
+      return state.users.find((user) => user.user_id == 1);
     },
   },
   mutations: {
@@ -58,18 +39,20 @@ export const store = new Vuex.Store({
       context.commit("increment");
     },
     getUsers(context) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("/users")
-          .then((response) => {
-            context.commit("getUsers", response.data.result);
-            resolve(response);
-          })
-          .catch((error) => {
-            reject(error);
-            console.log(error);
-          });
-      });
+      setTimeout(function() {
+        return new Promise((resolve, reject) => {
+          axios
+            .get("/users")
+            .then((response) => {
+              context.commit("getUsers", response.data.result);
+              resolve("sukses");
+            })
+            .catch((error) => {
+              reject(error);
+              console.log(error);
+            });
+        });
+      }, 1000);
     },
     createUser(context, data) {
       return new Promise((resolve, reject) => {

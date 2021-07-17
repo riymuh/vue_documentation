@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">Vue-App</div>
+      <div class="d-flex align-center">VUEAPP</div>
 
       <v-spacer></v-spacer>
 

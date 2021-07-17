@@ -1,10 +1,15 @@
 <template>
   <v-container class="lighten-5">
-    <!-- Stack the columns on mobile by making one full-width and the other half-width -->
     <v-row>
       <v-col cols="12" md="8">
         <v-card class="pa-5" outlined tile>
-          <DataTableComponent />
+          <div v-if="loadingBar" class="progress-status">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+          </div>
+          <DataTableComponent v-else />
         </v-card>
       </v-col>
       <v-col cols="6" md="4">
@@ -28,8 +33,8 @@ export default {
     EventBus.$on("viewData", (data) => this.viewData(data));
     this.$store
       .dispatch("getUsers")
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        this.isLoading();
       })
       .catch((err) => {
         console.log(err);
@@ -42,7 +47,7 @@ export default {
   data() {
     return {
       viewedData: [],
-      loading: false,
+      loadingBar: true,
     };
   },
 
@@ -55,6 +60,19 @@ export default {
     viewData(data) {
       this.viewedData = data;
     },
+    isLoading() {
+      setTimeout(() => {
+        this.loadingBar = false;
+      }, 1000);
+    },
   },
 };
 </script>
+
+<style scoped>
+.progress-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
