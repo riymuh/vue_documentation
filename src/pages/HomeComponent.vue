@@ -9,7 +9,7 @@
       </v-col>
       <v-col cols="6" md="4">
         <v-card class="pa-5" outlined tile>
-          <UserDetailComponent />
+          <UserDetailComponent :user="viewedData" />
         </v-card>
       </v-col>
     </v-row>
@@ -19,14 +19,34 @@
 <script>
 import UserDetailComponent from "../components/UserDetailComponent.vue";
 import DataTableComponent from "../components/DataTableComponent.vue";
+import { EventBus } from "@/eventBus.js";
+
 export default {
   name: "HomeComponent",
+
+  created() {
+    EventBus.$on("viewData", (data) => this.viewData(data));
+  },
+  beforeDestroy() {
+    EventBus.$off("viewData");
+  },
+
+  data() {
+    return {
+      viewedData: [],
+    };
+  },
 
   components: {
     UserDetailComponent,
     DataTableComponent,
   },
 
-  data: () => ({}),
+  methods: {
+    viewData(data) {
+      this.viewedData = data;
+      console.log("hallo" + this.viewedData);
+    },
+  },
 };
 </script>

@@ -71,7 +71,7 @@
       </v-toolbar>
     </template>
     <template v-slot:[`item.actions`]="{ item }">
-      <v-icon small class="mr-2"> mdi-eye </v-icon>
+      <v-icon small class="mr-2" @click="viewItem(item)"> mdi-eye </v-icon>
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
@@ -82,6 +82,8 @@
 </template>
 
 <script>
+import { EventBus } from "@/eventBus.js";
+
 export default {
   data: () => ({
     dialog: false,
@@ -100,6 +102,11 @@ export default {
     users: [],
     editedIndex: -1,
     editedItem: {
+      name: "",
+      email: "",
+      phone: "",
+    },
+    viewedItem: {
       name: "",
       email: "",
       phone: "",
@@ -137,20 +144,30 @@ export default {
   methods: {
     editItem(item) {
       this.editedIndex = this.getUsers.indexOf(item);
-      console.log("index" + this.editedIndex);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
+    viewItem(item) {
+      this.viewedItem = Object.assign({}, item);
+      EventBus.$emit("viewData", this.viewedItem);
+    },
+
     deleteItem(item) {
-      this.editedIndex = this.users.indexOf(item);
-      console.log("index" + this.editedIndex);
+      this.editedIndex = this.getUsers.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.users.splice(this.editedIndex, 1);
+      this.$store
+        .dispatch("deleteUser", this.editedIndex)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(() => {
+          console.log("hello");
+        });
       this.closeDelete();
     },
 
@@ -181,7 +198,6 @@ export default {
             console.log("hello");
           });
       } else {
-        //Object.assign(this.users[this.editedIndex], this.editedItem);
         this.$store
           .dispatch("updateUser", {
             user: this.editedItem,

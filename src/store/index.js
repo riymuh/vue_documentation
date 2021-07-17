@@ -42,6 +42,9 @@ export const store = new Vuex.Store({
     updateUser(state, data) {
       state.users.splice(data.index, 1, data.user);
     },
+    deleteUser(state, data) {
+      state.users.splice(data, 1);
+    },
   },
   actions: {
     increment(context) {
@@ -57,6 +60,7 @@ export const store = new Vuex.Store({
     },
     deleteUser(context, data) {
       console.log(data);
+      context.commit("deleteUser", data);
     },
   },
 });
