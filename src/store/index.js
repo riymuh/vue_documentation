@@ -1,7 +1,11 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import axios from "axios";
+import VueAxios from "vue-axios";
 
-Vue.use(Vuex);
+Vue.use(Vuex, VueAxios, axios);
+
+axios.defaults.baseURL = "http://localhost:3000/api/";
 
 export const store = new Vuex.Store({
   state: {
@@ -49,6 +53,21 @@ export const store = new Vuex.Store({
   actions: {
     increment(context) {
       context.commit("increment");
+    },
+    getUsers(context) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get("/users")
+          .then((response) => {
+            console.log(response);
+            context.commit("getUsers", response.result);
+            resolve(response);
+          })
+          .catch((error) => {
+            reject(error);
+            console.log(error);
+          });
+      });
     },
     createUser(context, data) {
       context.commit("createUser", data);

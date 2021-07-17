@@ -26,6 +26,14 @@ export default {
 
   created() {
     EventBus.$on("viewData", (data) => this.viewData(data));
+    this.$store
+      .dispatch("getUsers")
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   },
   beforeDestroy() {
     EventBus.$off("viewData");
@@ -34,6 +42,7 @@ export default {
   data() {
     return {
       viewedData: [],
+      loading: false,
     };
   },
 
@@ -45,7 +54,6 @@ export default {
   methods: {
     viewData(data) {
       this.viewedData = data;
-      console.log("hallo" + this.viewedData);
     },
   },
 };
