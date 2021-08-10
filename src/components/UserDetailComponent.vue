@@ -18,7 +18,7 @@
       </v-list-item-icon>
 
       <v-list-item-content>
-        <v-list-item-title>{{ user.phone }}</v-list-item-title>
+        <v-list-item-title>{{ user.phone_number }}</v-list-item-title>
         <v-list-item-subtitle>Phone</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>

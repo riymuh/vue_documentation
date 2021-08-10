@@ -35,7 +35,7 @@
                   </v-col>
                   <v-col cols="12" sm="12" md="12">
                     <v-text-field
-                      v-model="editedItem.phone"
+                      v-model="editedItem.phone_number"
                       label="Phone"
                     ></v-text-field>
                   </v-col>
@@ -93,7 +93,7 @@ export default {
         value: "name",
       },
       { text: "Email", value: "email" },
-      { text: "Phone", value: "phone" },
+      { text: "Phone", value: "phone_number" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     users: [],
@@ -101,17 +101,17 @@ export default {
     editedItem: {
       name: "",
       email: "",
-      phone: "",
+      phone_number: "",
     },
     viewedItem: {
       name: "",
       email: "",
-      phone: "",
+      phone_number: "",
     },
     defaultItem: {
       name: "",
       email: "",
-      phone: "",
+      phone_number: "",
     },
   }),
 

@@ -44,8 +44,9 @@ export const store = new Vuex.Store({
           axios
             .get("/users")
             .then((response) => {
-              context.commit("getUsers", response.data.result);
+              context.commit("getUsers", response.data.results);
               resolve("sukses");
+              console.log(response)
             })
             .catch((error) => {
               reject(error);
@@ -59,7 +60,7 @@ export const store = new Vuex.Store({
         axios
           .post("/users", data)
           .then((response) => {
-            context.commit("createUser", response.data.result);
+            context.commit("createUser", response.data.results);
             resolve(response);
           })
           .catch((error) => {
@@ -80,7 +81,7 @@ export const store = new Vuex.Store({
           .then((response) => {
             const update = {
               index: data.index,
-              user: response.data.result,
+              user: response.data.results,
             };
             context.commit("updateUser", update);
             resolve(response);
